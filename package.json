@@ -1,0 +1,31 @@
+{
+  "name": "crawler",
+  "version": "0.1.0",
+  "description": "Node.js screen scraping and web crawling module",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "crawler",
+    "spider"
+  ],
+  "author": "@dreyacosta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dreyacosta/arania.git"
+  },
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "coffee-script": "^1.7.1",
+    "cron": "^1.0.4",
+    "request": "^2.36.0",
+    "time": "^0.11.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "gulp": "^3.8.1",
+    "gulp-mocha": "^0.4.1"
+  }
+}
