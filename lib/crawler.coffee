@@ -10,7 +10,7 @@ class Crawl
   working: false
 
   constructor: (config = {}) ->
-    @requestsToTimeout = config.requestsToTimeout or 50
+    @requestsToStopper = config.requestsToStopper or 50
     @stopperTimeout = config.stopperTimeout or 60000
     @cron = new Cron
       cronTime: config.cronTime or '* * * * * *'
@@ -20,33 +20,47 @@ class Crawl
       context: @
 
   start: (urls = []) ->
-    console.log 'start', urls
+    console.log "Start URLs: #{urls}"
     unless @working
       @urls_queue = urls
       @scraped_urls = []
       @threads = 0
-      @requestsFromLastTimeout = 0
+      @requestsFromLastStopper = 0
       @working = true
       do @scrape
 
   finish: ->
-    console.log 'Finish'
+    console.log "Finish"
     @working = false
 
+  stopper: ->
+    unless @timeoutId
+      console.log "Waiting #{@stopperTimeout}... Scraped URLs: #{@scraped_urls.length}"
+      @timeoutId = setTimeout =>
+        delete @timeoutId
+        @requestsFromLastStopper = 0
+        do @scrape
+      , @stopperTimeout
+
   scrape: ->
-    url = @urls_queue.shift()
-    while url
-      @makeRequest url
-      @scraped_urls.push url
-      @threads++
-      @requestsFromLastTimeout++
-      console.log 'Time 2', @requestsFromLastTimeout, @requestsToTimeout
+    if @requestsFromLastStopper < @requestsToStopper
       url = @urls_queue.shift()
-    if @threads is 0 then do @finish
+      while url
+        @makeRequest url
+        @scraped_urls.push url
+        @threads++
+        @requestsFromLastStopper++
+        url = @urls_queue.shift()
+      if @threads is 0 then do @finish
+    else
+      do @stopper
 
   makeRequest: (url) ->
-    request url, do @preprocessResponse
-    # console.log 'Scraping', url
+    data =
+      url: url
+      encoding: 'utf8'
+    request data, do @preprocessResponse
+    console.log "Scraping... #{url}"
 
   preprocessResponse: ->
     (error, response, body) =>
