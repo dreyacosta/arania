@@ -19,13 +19,15 @@ class Crawl
       timeZone: config.timeZone or 'Europe/Madrid'
       context: @
 
-  start: (urls = []) ->
+  start: (urls = [], callback) ->
     console.log "Start URLs: #{urls}"
     unless @working
-      @urls_queue = urls
+      @data_queue = []
+      @urls_queue = []
       @scraped_urls = []
       @threads = 0
       @requestsFromLastStopper = 0
+      @queue url, callback for url in urls
       @working = true
       do @scrape
 
@@ -35,12 +37,16 @@ class Crawl
 
   stopper: ->
     unless @timeoutId
-      console.log "Waiting #{@stopperTimeout}... Scraped URLs: #{@scraped_urls.length}"
       @timeoutId = setTimeout =>
         delete @timeoutId
         @requestsFromLastStopper = 0
         do @scrape
       , @stopperTimeout
+
+  queue: (url, callback) ->
+    if @urls_queue.indexOf(url) is -1 and @scraped_urls.indexOf(url) is -1
+      @data_queue[url] = url: url, callback: callback
+      @urls_queue.push url
 
   scrape: ->
     if @requestsFromLastStopper < @requestsToStopper
@@ -54,18 +60,21 @@ class Crawl
       if @threads is 0 then do @finish
     else
       do @stopper
+      console.log "Waiting #{@stopperTimeout}ms Scraped: #{@scraped_urls.length}"
+      console.log "Threads: #{@threads}"
+      console.log "Queue: #{@urls_queue.length}"
 
   makeRequest: (url) ->
     data =
       url: url
       encoding: 'utf8'
-    request data, do @preprocessResponse
+    request data, @preprocessResponse url
     console.log "Scraping... #{url}"
 
-  preprocessResponse: ->
+  preprocessResponse: (url) ->
     (error, response, body) =>
       if not error and response.statusCode is 200
-        @parseResponse error, response, cheerio(body)
+        @data_queue[url].callback.call @, error, response, cheerio(body)
       @threads--
       do @scrape
 
