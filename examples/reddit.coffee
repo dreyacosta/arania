@@ -1,14 +1,20 @@
-Crawl = require './lib/crawler.coffee'
+Crawl = require '../lib/crawler.coffee'
 
 web = 'http://www.reddit.com/r/coffeescript'
 
 class MyCrawler extends Crawl
-  results: []
+  resultsItemParser: []
+  resultsPageParser: []
 
   start: ->
     urls = []
     urls.push web
     super urls, @itemParser
+
+  finish: ->
+    console.log 'resultsItemParser:', @resultsItemParser
+    console.log 'resultsPageParser:', @resultsPageParser
+    super
 
   itemParser: (error, response, body) ->
     navigation = body.find('.nextprev > a')
@@ -21,10 +27,14 @@ class MyCrawler extends Crawl
       data =
         href: titles.eq(i).attr('href')
         title: titles.eq(i).html()
+      @resultsItemParser.push data
       @queue data.href, @questionPageParser
 
   questionPageParser: (error, response, body) ->
+    pageTitle = body.find('html > head > title').html()
+    @resultsPageParser.push pageTitle
 
 crawl = new MyCrawler
-  cronTime: '00 43 * * * *'
+  cronTime: '00 36 * * * *'
   requestsToStopper: 100
+  stopperTimeout: 30000
