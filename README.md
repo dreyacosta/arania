@@ -6,7 +6,7 @@
 First of all you have to require `arania` and extends the class with two
 mandatory methods. Also you could export your extension as a module.
 
-[See one example]()
+[See one example](https://github.com/dreyacosta/arania/blob/master/examples/reddit.coffee)
 
 ### Use your crawler
 Now you can import your crawler and pass some configurations:
