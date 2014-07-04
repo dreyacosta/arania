@@ -33,8 +33,3 @@ class MyCrawler extends Crawl
   questionPageParser: (error, response, body) ->
     pageTitle = body.find('html > head > title').html()
     @resultsPageParser.push pageTitle
-
-crawl = new MyCrawler
-  cronTime: '00 36 * * * *'
-  requestsToStopper: 100
-  stopperTimeout: 30000
