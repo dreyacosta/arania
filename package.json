@@ -1,5 +1,5 @@
 {
-  "name": "crawler",
+  "name": "arania",
   "version": "0.1.0",
   "description": "Node.js screen scraping and web crawling module",
   "main": "index.js",
