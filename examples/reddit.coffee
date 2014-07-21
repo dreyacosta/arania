@@ -12,8 +12,11 @@ class MyCrawler extends Crawl
     super urls, @itemParser
 
   finish: ->
+    console.log '==========================================================='
     console.log 'resultsItemParser:', @resultsItemParser
+    console.log '==========================================================='
     console.log 'resultsPageParser:', @resultsPageParser
+    console.log '==========================================================='
     super
 
   itemParser: (error, response, body) ->
@@ -33,3 +36,5 @@ class MyCrawler extends Crawl
   questionPageParser: (error, response, body) ->
     pageTitle = body.find('html > head > title').html()
     @resultsPageParser.push pageTitle
+
+module.exports = MyCrawler
