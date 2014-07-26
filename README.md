@@ -1,6 +1,11 @@
 # Arania
 > Node.js screen scraping and web crawling module (work in progress...)
 
+## Installation
+```bash
+$ npm install arania --save
+```
+
 ## Usage
 ### Extends crawler 'Class'
 First of all you have to require `arania` and extends the class with two
