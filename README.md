@@ -1,5 +1,6 @@
 # Arania
-> Node.js screen scraping and web crawling module (work in progress...)
+> Node.js screen scraping and web crawling module heavily inspired
+by [Yoi](https://github.com/tapquo/yoi) project. (work in progress...)
 
 ## Installation
 ```bash
