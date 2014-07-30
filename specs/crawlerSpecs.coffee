@@ -2,8 +2,8 @@ expect  = require('chai').expect
 Crawler = require '../lib/crawler.coffee'
 
 class MyCrawl extends Crawler
-  results: []
-  resultsThings: []
+  redditPageResults: []
+  thingPageResults: []
 
   start: ->
     urls = []
@@ -21,23 +21,22 @@ class MyCrawl extends Crawler
       regexQuery = new RegExp 'http.*'
       data.href = "#{domain}#{data.href}" unless data.href.match regexQuery
       @queue data.href, @thingParser
-    @results.push body
+    @redditPageResults.push body
 
   thingParser: (error, response, body) ->
-    do @finish if @resultsThings.length is 25
-    @resultsThings.push body
+    @thingPageResults.push body unless @thingPageResults.length is 25
 
 myCrawl = new MyCrawl
   cronTime: '00 00 00 29 2 *'
   requestsToStopper: 100
 
 describe 'Arania crawler', ->
-  it 'should crawl 2 results and 25 resultsThings', (done) ->
+  it 'should parse 1 redditPageResults and 25 thingPageResults', (done) ->
     this.timeout 10000
     do myCrawl.start
     setTimeout ->
-      expect(myCrawl.results.length).to.equal 1
-      expect(myCrawl.resultsThings.length).to.equal 25
-      do myCrawl.cron.finish
+      expect(myCrawl.redditPageResults.length).to.equal 1
+      expect(myCrawl.thingPageResults.length).to.equal 25
+      do myCrawl.cron.stop
       do done
     , 5000
