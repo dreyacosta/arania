@@ -56,6 +56,7 @@ class Crawl
         @scraped_urls.push url
         @threads++
         @requestsFromLastStopper++
+        break if @requestsFromLastStopper > @requestsToStopper
         url = @urls_queue.shift()
       if @threads is 0 then do @finish
     else
