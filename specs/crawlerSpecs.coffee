@@ -59,7 +59,7 @@ describe 'Arania crawler', ->
       expect(myCrawl.runningTimes).to.equal 3
       do myCrawl.cron.stop
       do done
-    , 35000
+    , 29000
 
   it 'should stop after 5 requests', (done) ->
     this.timeout 30000
