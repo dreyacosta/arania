@@ -1,6 +1,6 @@
 {
   "name": "arania",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.js screen scraping and web crawling module",
   "main": "index.js",
   "scripts": {
