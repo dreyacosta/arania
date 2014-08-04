@@ -1,4 +1,4 @@
-# Arania
+# Arania [![Build Status](https://travis-ci.org/dreyacosta/arania.svg?branch=master)](https://travis-ci.org/dreyacosta/arania)
 > Node.js screen scraping and web crawling module heavily inspired
 by [Yoi](https://github.com/tapquo/yoi) project. (work in progress...)
 
