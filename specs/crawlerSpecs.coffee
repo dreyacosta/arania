@@ -52,14 +52,14 @@ describe 'Arania crawler', ->
     this.timeout 60000
 
     myCrawl = new MyCrawl
-      cronTime: '*/15 * * * * *'
+      cronTime: '*/10 * * * * *'
       requestsToStopper: 100
 
     setTimeout ->
       expect(myCrawl.runningTimes).to.equal 3
       do myCrawl.cron.stop
       do done
-    , 28000
+    , 35000
 
   it 'should stop after 5 requests', (done) ->
     this.timeout 30000
