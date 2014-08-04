@@ -49,10 +49,10 @@ describe 'Arania crawler', ->
     , 5000
 
   it 'should be run 3 times via CronJob', (done) ->
-    this.timeout 30000
+    this.timeout 60000
 
     myCrawl = new MyCrawl
-      cronTime: '*/10 * * * * *'
+      cronTime: '*/15 * * * * *'
       requestsToStopper: 100
 
     setTimeout ->
